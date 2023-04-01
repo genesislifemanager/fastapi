@@ -8,7 +8,7 @@ app = FastAPI()
 origins = [
     "http://localhost",
     "http://localhost:5173",
-    "https://genesis-frontend-dev.vercel.app/"
+    "https://genesis-frontend-dev.vercel.app"
 ]
 
 app.add_middleware(
