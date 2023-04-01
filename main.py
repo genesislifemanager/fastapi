@@ -30,17 +30,16 @@ def classifyQuery(query):
     fitted_vectorizer = load('./model/fitted_vectorizer.joblib')
     typeId, = model.predict(fitted_vectorizer.transform([query]))
 
-    match typeId:
-        case 0:
-            return "Task"
-        case 1:
-            return "Event"
-        case 2:
-            return "Routine"
-        case 3:
-            return "Project"
-        case 4:
-            return "Venture"
+    if typeId == 0:    
+        return "Task"
+    if typeId == 1:
+        return "Event"
+    if typeId == 2:
+        return "Routine"
+    if typeId ==  3:
+        return "Project"
+    if typeId == 4:
+        return "Venture"
 
 
 def extractEntities(query):
