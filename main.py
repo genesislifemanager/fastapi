@@ -129,10 +129,7 @@ def extractEntities(query, type):
         duration_entities['h']=duration_hours
         duration_entities['m']=duration_minutes
         entities_dict['duration']=duration_entities
-
-                
-                       
-
+                                       
 
     ''''elif next_token and (next_token.text == "hours"):
                     # The number is part of a duration expression
@@ -204,8 +201,12 @@ def extractEntities(query, type):
 async def createQuery(query: Query):
     type = classifyQuery(query.query)
     print(type)
-    extracted = extractEntities(query.query, type)
-    print(extracted)
+    extracted = {}
+    try:
+        extracted = extractEntities(query.query, type)
+        print(extracted)
+    except:
+         return {"status": "fail", "data": {"uid": query.uid}}
     
     if (type == "Task") or (type == "Event") or (type == "Routine"):
         return {"status": "success", "data": {"uid": query.uid, "name": extracted["name"], "type": type, "mode": "Static", "s": extracted["s"], "duration": extracted["duration"], "projectId": -1, "reminder": "", "status": "Open"}}
