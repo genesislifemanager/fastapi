@@ -78,6 +78,10 @@ def extractEntities(query, type):
 
     entities_dict = {}
     duration_entities = {}
+    token_check_min="minutes"
+    token_check_hour="hours"
+    token1 = nlp(token_check_min)[0]
+    token2=nlp(token_check_hour)[0]
 
     if (type == "Task") or (type == "Event") or (type == "Routine"):
 
@@ -97,7 +101,38 @@ def extractEntities(query, type):
 
                    # print("Start time:", start_time)
 
-                elif next_token and (next_token.text == "hours"):
+                if next_token and (next_token.text == "hours"):
+                        duration_hours = str(token.text)
+                        #print(duration_hours)
+                        if token1 in doc:
+                                for token in doc:
+                                        if next_token and (next_token.text == "minutes"):
+                                                duration_minutes=str(token.text)
+                                        else:
+                                            duration_minutes=0
+                       
+
+                
+
+                if next_token and (next_token.text == "minutes"):
+                       duration_minutes=str(token.text)
+                       if token2 in doc:
+                                for token in doc:
+                                        if next_token and (next_token.text == "hours"):
+                                                duration_hours=str(token.text)
+                                        else:
+                                            duration_hours=0
+
+
+        duration_entities['h']=duration_hours
+        duration_entities['m']=duration_minutes
+        entities_dict['duration']=duration_entities
+
+                
+                       
+
+
+    ''''elif next_token and (next_token.text == "hours"):
                     # The number is part of a duration expression
                     duration_hours = str(token.text)
                     entities_dict['duration'] = duration_hours+" hours"
@@ -111,7 +146,7 @@ def extractEntities(query, type):
                     duration_minutes = str(token.text)
                     duration_entities['h'] = duration_hours
                     duration_entities['m'] = duration_minutes
-                    entities_dict['duration'] = duration_entities
+                    entities_dict['duration'] = duration_entities'''
 
     if (type == "Project"):
 
@@ -120,6 +155,39 @@ def extractEntities(query, type):
         pattern2 = r"\d{2}/\d{2}/\d{4}\s\d{2}:\d{2}"
         matches = re.findall(pattern2, query)
         entities_dict['due'] = matches[0]
+        
+        for token in doc:
+        # Check if the token is a number
+            if token.pos_ == "NUM":
+                    next_token = doc[token.i+1] if token.i+1 < len(doc) else None
+                    if next_token and (next_token.text == "hours"):
+                            duration_hours = str(token.text)
+                            #print(duration_hours)
+                            if token1 in doc:
+                                    for token in doc:
+                                            if next_token and (next_token.text == "minutes"):
+                                                    duration_minutes=str(token.text)
+                                            else:
+                                                duration_minutes=0
+                        
+
+                    
+
+                    if next_token and (next_token.text == "minutes"):
+                        duration_minutes=str(token.text)
+                        if token2 in doc:
+                                    for token in doc:
+                                            if next_token and (next_token.text == "hours"):
+                                                    duration_hours=str(token.text)
+                                            else:
+                                                duration_hours=0
+
+        duration_entities['h']=duration_hours
+        duration_entities['m']=duration_minutes
+        entities_dict['duration']=duration_entities   
+
+    
+
 
     if (type == "Venture"):
 
