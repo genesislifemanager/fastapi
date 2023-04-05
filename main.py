@@ -95,7 +95,7 @@ def extractEntities(query, type):
             if token.pos_ == "NUM":
                 # Check if the next token is "pm" or "am"
                 next_token = doc[token.i+1] if token.i+1 < len(doc) else None
-                if not start_time:
+                if not next_token and (next_token.text == "pm" or next_token.text == "am" ):
                     # This is the start time
                     start_time = token.text + " " + next_token.text
                     time_obj = datetime.strptime(start_time, '%I.%M %p')
