@@ -87,8 +87,8 @@ def extractEntities(query, type):
     if (type == "Task") or (type == "Event") or (type == "Routine"):
 
         extractName(query,entities_dict)
-        duration_hours=""
-        duration_minutes=""
+        duration_hours=0
+        duration_minutes=0
 
         for token in doc:
             # Check if the token is a number
@@ -151,8 +151,8 @@ def extractEntities(query, type):
     if (type == "Project"):
 
         extractName(query,entities_dict)
-        duration_hours=""
-        duration_minutes=""
+        duration_hours=0
+        duration_minutes=0
 
         pattern2 = r"\d{2}/\d{2}/\d{4}\s\d{2}:\d{2}"
         matches = re.findall(pattern2, query)
