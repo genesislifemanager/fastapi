@@ -135,5 +135,4 @@ async def createQuery(query: Query):
     print(type)
     print(extracted)
     
-
-    return {"status": "success", "data": {"uid": query.uid, "name": "", "type": type, "mode": "", "s": "", "duration": "", "projectId": "", "reminder": "", "status": ""}}
+    return {"status": "success", "data": {"uid": query.uid, "name": extracted.name, "type": type, "mode": "", "s": extracted.s, "duration": "", "projectId": "", "reminder": "", "status": ""}}
