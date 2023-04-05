@@ -7,10 +7,9 @@ from spacy.matcher import Matcher
 import re
 from datetime import datetime
 
-entities_dict = {}
-duration_entities = {}
+# I want to @study client server architecture@ module at 8.30 pm for 2 hours
 
-nlp = spacy.load("en_core_web_sm")
+nlp = load('./model/nlp.joblib')
 
 app = FastAPI()
 
@@ -51,7 +50,7 @@ def classifyQuery(query):
         return "Venture"
 
 
-def extractName(query):
+def extractName(query,entities_dict):
 
     # Define the regular expression pattern
     pattern = r'@\w+(?:\s+\w+)*@'
@@ -76,9 +75,12 @@ def extractEntities(query, type):
     doc = nlp(query)
     start_time = None
 
+    entities_dict = {}
+    duration_entities = {}
+
     if (type == "Task") or (type == "Event") or (type == "Routine"):
 
-        extractName(query)
+        extractName(query,entities_dict)
 
         for token in doc:
             # Check if the token is a number
@@ -110,27 +112,27 @@ def extractEntities(query, type):
                     duration_entities['m'] = duration_minutes
                     entities_dict['duration'] = duration_entities
 
-                
-
     if (type == "Project"):
 
-        extractName(query)
-        
+        extractName(query,entities_dict)
+
         pattern2 = r"\d{2}/\d{2}/\d{4}\s\d{2}:\d{2}"
         matches = re.findall(pattern2, query)
-        entities_dict['due'] =matches[0]
-    
+        entities_dict['due'] = matches[0]
+
     if (type == "Venture"):
-        
-        extractName(query)
-    
+
+        extractName(query,entities_dict)
+
     return entities_dict
 
 
 @app.post("/query")
 async def createQuery(query: Query):
     type = classifyQuery(query.query)
-    
     extracted = extractEntities(query.query, type)
+    print(type)
     print(extracted)
+    
+
     return {"status": "success", "data": {"uid": query.uid, "name": "", "type": type, "mode": "", "s": "", "duration": "", "projectId": "", "reminder": "", "status": ""}}
