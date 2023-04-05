@@ -1,3 +1,4 @@
+import platform
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from joblib import load
@@ -6,6 +7,10 @@ import spacy
 from spacy.matcher import Matcher
 import re
 from datetime import datetime
+
+import pathlib
+plt = platform.system()
+if plt == 'Windows': pathlib.PosixPath = pathlib.WindowsPath
 
 # I want to @study client server architecture@ module at 8.30 pm for 2 hours
 
