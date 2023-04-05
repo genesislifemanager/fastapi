@@ -8,6 +8,10 @@ from spacy.matcher import Matcher
 import re
 from datetime import datetime
 
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.svm import LinearSVC
 # I want to @study client server architecture@ module at 8.30 pm for 2 hours
 
 nlp = spacy.load('en_core_web_sm')
@@ -35,8 +39,27 @@ class Query(BaseModel):
 
 
 def classifyQuery(query):
-    model = load('./model/model.joblib')
-    fitted_vectorizer = load('./model/fitted_vectorizer.joblib')
+    # model = load('./model/model.joblib')
+    # fitted_vectorizer = load('./model/fitted_vectorizer.joblib')
+    
+    df = pd.read_csv('./genesis-datapoints.csv')
+    X = df['Query']
+    Y = df['Category']
+
+    X_train, X_test, Y_train, Y_test = train_test_split(X, Y, 
+                                                    test_size=0.25,
+                                                    random_state = 0)
+
+    tfidf = TfidfVectorizer(sublinear_tf=True, min_df=5,
+                        ngram_range=(1, 2), 
+                        token_pattern=r'(?u)\b[A-Za-z]+\b',
+                        stop_words='english')
+
+    fitted_vectorizer = tfidf.fit(X_train)
+    tfidf_vectorizer_vectors = fitted_vectorizer.transform(X_train)
+
+    model = LinearSVC().fit(tfidf_vectorizer_vectors, Y_train)
+    
     query = query.replace("@", "")
     typeId, = model.predict(fitted_vectorizer.transform([query]))
 
