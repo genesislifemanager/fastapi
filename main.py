@@ -8,10 +8,9 @@ from spacy.matcher import Matcher
 import re
 from datetime import datetime
 
-
 # I want to @study client server architecture@ module at 8.30 pm for 2 hours
 
-nlp = load('./model/nlp.joblib')
+nlp = spacy.load('en_core_web_sm')
 
 app = FastAPI()
 
