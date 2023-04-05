@@ -86,6 +86,8 @@ def extractEntities(query, type):
     if (type == "Task") or (type == "Event") or (type == "Routine"):
 
         extractName(query,entities_dict)
+        duration_hours=""
+        duration_minutes=""
 
         for token in doc:
             # Check if the token is a number
