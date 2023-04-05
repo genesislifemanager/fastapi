@@ -37,6 +37,7 @@ class Query(BaseModel):
 def classifyQuery(query):
     model = load('./model/model.joblib')
     fitted_vectorizer = load('./model/fitted_vectorizer.joblib')
+    query = query.replace("@", "")
     typeId, = model.predict(fitted_vectorizer.transform([query]))
 
     if typeId == 0:
