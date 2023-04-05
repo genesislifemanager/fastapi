@@ -10,8 +10,7 @@ from datetime import datetime
 
 import pathlib
 plt = platform.system()
-if plt == 'Windows':  pathlib.WindowsPath = pathlib.PosixPath
-
+print(plt)
 # I want to @study client server architecture@ module at 8.30 pm for 2 hours
 
 nlp = load('./model/nlp.joblib')
