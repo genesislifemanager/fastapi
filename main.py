@@ -153,6 +153,8 @@ def extractEntities(query, type):
     if (type == "Project"):
 
         extractName(query,entities_dict)
+        duration_hours=""
+        duration_minutes=""
 
         pattern2 = r"\d{2}/\d{2}/\d{4}\s\d{2}:\d{2}"
         matches = re.findall(pattern2, query)
