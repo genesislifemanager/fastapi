@@ -203,8 +203,8 @@ def extractEntities(query, type):
 @app.post("/query")
 async def createQuery(query: Query):
     type = classifyQuery(query.query)
-    extracted = extractEntities(query.query, type)
     print(type)
+    extracted = extractEntities(query.query, type)
     print(extracted)
     
     if (type == "Task") or (type == "Event") or (type == "Routine"):
