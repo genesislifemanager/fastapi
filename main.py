@@ -21,7 +21,8 @@ app = FastAPI()
 origins = [
     "http://localhost",
     "http://localhost:5173",
-    "https://genesis-frontend-dev.vercel.app"
+    "https://genesis-frontend-dev.vercel.app",
+    "https://genesis-frontend-sigma.vercel.app"
 ]
 
 app.add_middleware(
@@ -41,7 +42,7 @@ class Query(BaseModel):
 def classifyQuery(query):
     # model = load('./model/model.joblib')
     # fitted_vectorizer = load('./model/fitted_vectorizer.joblib')
-    
+
     df = pd.read_csv('./genesis-datapoints.csv')
     X = df['Query']
     Y = df['Category']
