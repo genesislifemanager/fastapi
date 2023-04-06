@@ -250,7 +250,7 @@ async def createQuery(query: Query):
         return {"status": "success", "data": {"uid": query.uid, "name": extracted["name"], "type": type, "mode": "Static", "s": extracted["s"], "duration": extracted["duration"], "projectId": -1, "reminder": "", "status": "Open"}}
     
     elif type == "Project":
-        return {"status": "success", "data": {"uid": query.uid, "name": extracted["name"], "due":extracted["due"], "duration": extracted["duration"], "ventureId": -1, "status": "Open"}}
+        return {"status": "success", "data": {"uid": query.uid, "name": extracted["name"], "type": type,"due":extracted["due"], "duration": extracted["duration"], "ventureId": -1, "status": "Open"}}
 
     elif type == "Venture":
-        return {"status": "success", "data": {"uid": query.uid, "name": extracted["name"]}}
+        return {"status": "success", "data": {"uid": query.uid, "type": type,"name": extracted["name"]}}
