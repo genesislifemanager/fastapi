@@ -33,37 +33,46 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
+# schema for the request body
 class Query(BaseModel):
     uid: str
     query: str
 
-
+# classifier function that utilizes machine learning to identofy the type of the resource indicated by a query 
 def classifyQuery(query):
-    # model = load('./model/model.joblib')
-    # fitted_vectorizer = load('./model/fitted_vectorizer.joblib')
-
+    
+    # read the data from the csv file and create a dataframe
     df = pd.read_csv('./genesis-datapoints.csv')
+
+    # label and partition the dataframe
     X = df['Query']
     Y = df['Category']
 
+    # create test-train splits from the created partitions
     X_train, X_test, Y_train, Y_test = train_test_split(X, Y, 
                                                     test_size=0.25,
                                                     random_state = 0)
 
+    # define the configurations and create the vectorizer
     tfidf = TfidfVectorizer(sublinear_tf=True, min_df=5,
                         ngram_range=(1, 2), 
                         token_pattern=r'(?u)\b[A-Za-z]+\b',
                         stop_words='english')
 
+    # fit the vectorizer to the data points
     fitted_vectorizer = tfidf.fit(X_train)
     tfidf_vectorizer_vectors = fitted_vectorizer.transform(X_train)
 
+    # fit the model to the dataframes
     model = LinearSVC().fit(tfidf_vectorizer_vectors, Y_train)
     
+    # ignore the @ delimiter utilized by the named entity recognition system 
     query = query.replace("@", "")
+
+    # predict the type of the query and get the id
     typeId, = model.predict(fitted_vectorizer.transform([query]))
 
+    # return the type based on the id
     if typeId == 0:
         return "Task"
     if typeId == 1:
@@ -225,7 +234,7 @@ def extractEntities(query, type):
 
     return entities_dict
 
-
+# controller function that takes in a http request with query as the body and sends appropiate response
 @app.post("/query")
 async def createQuery(query: Query):
     type = classifyQuery(query.query)
