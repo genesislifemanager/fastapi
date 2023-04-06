@@ -130,9 +130,10 @@ def extractEntities(query, type):
 
                 if next_token and (next_token.text == "hours"):
                         duration_hours = str(token.text)
-                        #print(duration_hours)
+                        #check whether the word assigned to token1 is in the doc
                         if token1 in doc:
                                 for token in doc:
+                                        # Check if the next token is "minutes"
                                         if next_token and (next_token.text == "minutes"):
                                                 duration_minutes=str(token.text)
                                         else:
@@ -143,8 +144,10 @@ def extractEntities(query, type):
 
                 if next_token and (next_token.text == "minutes"):
                        duration_minutes=str(token.text)
+                       #check whether the word assigned to token2 is in the doc
                        if token2 in doc:
                                 for token in doc:
+                                        # Check if the next token is "hours"
                                         if next_token and (next_token.text == "hours"):
                                                 duration_hours=str(token.text)
                                         else:
@@ -178,6 +181,7 @@ def extractEntities(query, type):
         duration_hours=0
         duration_minutes=0
 
+    #  define the pattern to catch date and time entities
         pattern2 = r"\d{2}/\d{2}/\d{4}\s\d{2}:\d{2}"
         matches = re.findall(pattern2, query)
         entities_dict['due'] = matches[0]
